@@ -26,6 +26,39 @@ const GameBoard = () => {
     };
 
     const updateBoard = (index, symbol) => {
-        board[index] = symbol
+        board[index] = symbol;
+    };
+
+    const winningCombinations = [
+        // row
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        // columns
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        // diagonals
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    const checkWinner = (board, symbol) => {
+        for (const combination of winningCombinations) {
+            const [a, b, c] = combination;
+            if (board[a] === symbol && board[b] === symbol && board[c] === symbol) {
+                return true
+            };
+        };
+        return false;
+    };
+
+    return {
+        initaliseBoard,
+        updateBoard,
+        checkWinner
     }
 }
+
+const gameBoard = GameBoard();
+gameBoard.initaliseBoard();
