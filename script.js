@@ -29,6 +29,12 @@ const GameBoard = () => {
         board[index] = symbol;
     };
 
+    const displayBoard = () => {
+        console.log(board.slice(0, 3))
+        console.log(board.slice(3, 6))
+        console.log(board.slice(6))
+    }
+
     const winningCombinations = [
         // row
         [0, 1, 2],
@@ -75,12 +81,39 @@ const GameBoard = () => {
     }
 
     return {
+        board,
         initaliseBoard,
         updateBoard,
+        displayBoard,
         checkWinner,
         checkDraw
     }
 }
 
-const gameBoard = GameBoard();
-gameBoard.initaliseBoard();
+const Game = () => {
+    const player1 = Player('Player 1', 'X');
+    const player2 = Player('Player 2', 'O');
+    const gameBoard = GameBoard();
+    const validMoves = [
+        'top left', 'top middle', 'top right',
+        'middle left', 'middle middle', 'middle right',
+        'bottom left', 'bottom middle', 'bottom right',
+    ]
+
+    let currentPlayer = player1;
+
+
+    const startGame = () => {gameBoard.initaliseBoard()};
+
+    while (!gameBoard.checkWinner(gameBoard.board, currentPlayer.symbol)) {
+        const move = prompt('What is your move?');
+        if (validMoves.includes(move)) {
+            const index = validMoves.indexOf(move);
+            gameBoard.updateBoard(index, currentPlayer.symbol)
+            gameBoard.displayBoard();
+        };
+        break;
+    };
+};
+
+Game();
