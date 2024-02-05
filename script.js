@@ -27,7 +27,6 @@ const GameBoard = () => {
 
     const updateBoard = (index, symbol) => {
         board[index] = symbol;
-        console.log(index, symbol);
     };
 
     const displayBoard = () => {
@@ -122,7 +121,7 @@ const Game = () => {
             } else {
                 console.log('Invalid move');
             };
-            
+
             switchPlayer();
         };
     };
