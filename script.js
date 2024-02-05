@@ -27,6 +27,7 @@ const GameBoard = () => {
 
     const updateBoard = (index, symbol) => {
         board[index] = symbol;
+        console.log(index, symbol);
     };
 
     const displayBoard = () => {
@@ -63,7 +64,7 @@ const GameBoard = () => {
         [2, 4, 6]
     ];
 
-    const checkWinner = (board, symbol) => {
+    const checkWinner = (symbol) => {
         for (const combination of winningCombinations) {
             const [a, b, c] = combination;
             if (board[a] === symbol && board[b] === symbol && board[c] === symbol) {
@@ -102,18 +103,42 @@ const Game = () => {
 
     let currentPlayer = player1;
 
+    const switchPlayer = () => {
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+    }
+    
+    const playGame = () => {
+        while (!gameBoard.checkWinner(currentPlayer.symbol)) {
+            const move = prompt('What is your move?');
+            if (validMoves.includes(move)) {
+                const index = validMoves.indexOf(move);
+                gameBoard.updateBoard(index, currentPlayer.symbol)
+                gameBoard.displayBoard();
 
-    const startGame = () => {gameBoard.initaliseBoard()};
-
-    while (!gameBoard.checkWinner(gameBoard.board, currentPlayer.symbol)) {
-        const move = prompt('What is your move?');
-        if (validMoves.includes(move)) {
-            const index = validMoves.indexOf(move);
-            gameBoard.updateBoard(index, currentPlayer.symbol)
-            gameBoard.displayBoard();
+                if (gameBoard.checkWinner(currentPlayer.symbol)) {
+                    console.log(`${currentPlayer.name} wins!`);
+                    break;
+                } 
+            } else {
+                console.log('Invalid move');
+            };
+            
+            switchPlayer();
         };
-        break;
     };
+    
+    const startGame = () => {
+        gameBoard.initaliseBoard();
+        playGame();
+    };
+
+    return {
+        startGame
+    }
 };
 
-Game();
+const newGame = Game();
+const start = prompt('Do you want to start the game?');
+if (start === 'yes') {
+    newGame.startGame();
+}
