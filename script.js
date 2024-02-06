@@ -72,7 +72,7 @@ const GameBoard = () => {
         return false;
     };
 
-    const checkDraw = (symbol) => {
+    const checkDraw = () => {
         if (!board.includes('')) {
             return true;
         };
@@ -117,7 +117,7 @@ const Game = () => {
                 if (gameBoard.checkWinner(currentPlayer.symbol)) {
                     console.log(`${currentPlayer.name} wins!`);
                     break;
-                } else if (gameBoard.checkDraw(currentPlayer.symbol)) {
+                } else if (gameBoard.checkDraw()) {
                     console.log(`Its a draw!`);
                     break;
                 }
