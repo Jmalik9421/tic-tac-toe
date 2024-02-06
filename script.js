@@ -118,11 +118,12 @@ const Game = () => {
                     console.log(`${currentPlayer.name} wins!`);
                     break;
                 } 
+                
+                switchPlayer();
             } else {
                 console.log('Invalid move');
             };
 
-            switchPlayer();
         };
     };
     
