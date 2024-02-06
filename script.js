@@ -1,7 +1,6 @@
-// high level objectives of the project:
-// - create object for players
-// - create object for gameboard
-// - create object for moves 
+// current problems:
+// 1. board not being checked to see if and index is already occupied with a symbol. this allows it to be overwritten
+
 
 const Player = (name, symbol) => {
     return {
@@ -73,10 +72,10 @@ const GameBoard = () => {
         return false;
     };
 
-    const checkDraw = (board, symbol) => {
-        if (!checkWinner(board, symbol)) {
-            return true
-        }
+    const checkDraw = (symbol) => {
+        if (!board.includes('')) {
+            return true;
+        };
         return false;
     }
 
@@ -107,9 +106,10 @@ const Game = () => {
     }
     
     const playGame = () => {
-        while (!gameBoard.checkWinner(currentPlayer.symbol)) {
+        while (true) {
             const move = prompt('What is your move?');
             if (validMoves.includes(move)) {
+                console.log(`${currentPlayer.name}'s move`)
                 const index = validMoves.indexOf(move);
                 gameBoard.updateBoard(index, currentPlayer.symbol)
                 gameBoard.displayBoard();
@@ -117,8 +117,11 @@ const Game = () => {
                 if (gameBoard.checkWinner(currentPlayer.symbol)) {
                     console.log(`${currentPlayer.name} wins!`);
                     break;
-                } 
-                
+                } else if (gameBoard.checkDraw(currentPlayer.symbol)) {
+                    console.log(`Its a draw!`);
+                    break;
+                }
+
                 switchPlayer();
             } else {
                 console.log('Invalid move');
