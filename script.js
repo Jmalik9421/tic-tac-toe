@@ -26,12 +26,18 @@ const GameBoard = () => {
 
     const updateBoard = (index, symbol) => {
         board[index] = symbol;
+        return board;
     };
 
     const displayBoard = () => {
         console.log(board.slice(0, 3))
         console.log(board.slice(3, 6))
         console.log(board.slice(6))
+        return board;
+    }
+
+    const returnBoard = () => {
+        return board; // function defined as GameBoard.board will return reference to let board. this returns value of board as it is is updated
     }
 
     const winningCombinations = [
@@ -84,6 +90,7 @@ const GameBoard = () => {
         initaliseBoard,
         updateBoard,
         displayBoard,
+        returnBoard,
         checkWinner,
         checkDraw
     }
@@ -93,24 +100,35 @@ const Game = () => {
     const player1 = Player('Player 1', 'X');
     const player2 = Player('Player 2', 'O');
     const gameBoard = GameBoard();
-    const validMoves = [
-        'top left', 'top middle', 'top right',
-        'middle left', 'middle middle', 'middle right',
-        'bottom left', 'bottom middle', 'bottom right',
-    ]
+    const validMoves = {
+        'top left': 0, 
+        'top middle': 1, 
+        'top right': 2,
+        'middle left': 3, 
+        'middle middle': 4, 
+        'middle right': 5,
+        'bottom left': 6, 
+        'bottom middle': 7, 
+        'bottom right': 8,
+    }
 
     let currentPlayer = player1;
 
     const switchPlayer = () => {
-        currentPlayer = currentPlayer === player1 ? player2 : player1;
+        return currentPlayer = currentPlayer === player1 ? player2 : player1;
     }
-    
+
     const playGame = () => {
         while (true) {
+            console.log(`${currentPlayer.name}'s move`);
             const move = prompt('What is your move?');
-            if (validMoves.includes(move)) {
-                console.log(`${currentPlayer.name}'s move`)
-                const index = validMoves.indexOf(move);
+            const index = validMoves[move];
+            const board = gameBoard.returnBoard();
+
+            if (
+                move in validMoves
+                && board[index] === ''
+                ) {
                 gameBoard.updateBoard(index, currentPlayer.symbol)
                 gameBoard.displayBoard();
 
