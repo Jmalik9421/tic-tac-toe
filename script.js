@@ -1,6 +1,7 @@
-// current problems:
-// 1. board not being checked to see if and index is already occupied with a symbol. this allows it to be overwritten
-
+// currently:
+// game works in console
+// next steps:
+// create html buttons to represent board, style in css, update js so it can be played with mouse
 
 const Player = (name, symbol) => {
     return {
@@ -16,6 +17,8 @@ const GameBoard = () => {
         '', '', '', // 'X' for player1, 'O' for player2
     ]
 
+    const btns = document.querySelectorAll('button');
+
     const initaliseBoard = () => {
         board = [   // board reset to array of empty strings
             '', '', '', 
@@ -29,10 +32,13 @@ const GameBoard = () => {
         return board;
     };
 
-    const displayBoard = () => {
-        console.log(board.slice(0, 3))
-        console.log(board.slice(3, 6))
-        console.log(board.slice(6))
+    const displayBoard = (index, symbol) => {
+        console.log(board.slice(0, 3));
+        console.log(board.slice(3, 6));
+        console.log(board.slice(6));
+
+        btns[index].textContent = symbol;
+
         return board;
     }
 
@@ -41,20 +47,6 @@ const GameBoard = () => {
     }
 
     const winningCombinations = [
-        // row
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        // columns
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        // diagonals
-        [0, 4, 8],
-        [2, 4, 6]
-    ];
-
-    const drawingCombinations = [
         // row
         [0, 1, 2],
         [3, 4, 5],
@@ -130,7 +122,7 @@ const Game = () => {
                 && board[index] === ''
                 ) {
                 gameBoard.updateBoard(index, currentPlayer.symbol)
-                gameBoard.displayBoard();
+                gameBoard.displayBoard(index, currentPlayer.symbol);
 
                 if (gameBoard.checkWinner(currentPlayer.symbol)) {
                     console.log(`${currentPlayer.name} wins!`);
