@@ -13,8 +13,21 @@ const GameBoard = () => {
     ]
 
     const btns = document.querySelectorAll('button');
+    const turn = document.querySelector('#current-player-turn');
 
     const initaliseBoard = () => {
+        // I AM HERE
+        // I HAVE THE FOLLOWING PROBLEM
+        // - game works ok but when the player chooses to playAgain the following happens
+        //  - the last symbol persists in it's place
+        //  - turn.textContent remains 'Invalid move'
+
+        turn.textContent = `Player 1's turn`;
+
+        btns.forEach(btn => {
+            btn.textContent = '';
+        });
+
         board = [   // board reset to array of empty strings
             '', '', '', 
             '', '', '', 
@@ -83,6 +96,8 @@ const Game = () => {
     const player1 = Player('Player 1', 'X');
     const player2 = Player('Player 2', 'O');
     const gameBoard = GameBoard();
+    const turn = document.querySelector('#current-player-turn');
+
 
     let currentPlayer = player1;
 
@@ -90,14 +105,24 @@ const Game = () => {
         return currentPlayer = currentPlayer === player1 ? player2 : player1;
     }
 
+    const playAgain = () => {
+        const playAgain = prompt('Do you want to play again?');
+        return playAgain;
+    }
+
+    const endGame = () => {
+        gameBoard.btns.forEach(btn => {
+            btn.disabled = true;
+        });
+    }
+
     const playGame = () => {
-        const btns = gameBoard.btns;
-        btns.forEach(btn => {
+        gameBoard.btns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const board = gameBoard.returnBoard();
                 const clickedBtn = document.getElementById(`${e.target.id}`);
                 const index = parseInt(clickedBtn.id);
-                const turn = document.querySelector('#current-player-turn');
+
                 turn.textContent = `${currentPlayer.name}'s turn`;
 
                 if (board[index] === '') {
@@ -106,8 +131,18 @@ const Game = () => {
     
                     if (gameBoard.checkWinner(currentPlayer.symbol)) {
                         turn.textContent = `${currentPlayer.name} wins!`;
+                        if (playAgain() === 'yes') {
+                            startGame()
+                        } else {
+                            endGame();
+                        }
                     } else if (gameBoard.checkDraw()) {
                         turn.textContent = `It's a draw!`;
+                        if (playAgain() === 'yes') {
+                            startGame()
+                        } else {
+                            endGame();
+                        }
                     }
     
                     switchPlayer();
@@ -124,6 +159,7 @@ const Game = () => {
     };
 
     return {
+        turn,
         startGame
     }
 };
