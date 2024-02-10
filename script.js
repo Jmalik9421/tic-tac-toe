@@ -22,7 +22,7 @@ const GameBoard = () => {
         //  - the last symbol persists in it's place
         //  - turn.textContent remains 'Invalid move'
 
-        turn.textContent = `Player 1's turn`;
+        turn.textContent = `Let's play`;
 
         btns.forEach(btn => {
             btn.textContent = '';
@@ -98,7 +98,6 @@ const Game = () => {
     const gameBoard = GameBoard();
     const turn = document.querySelector('#current-player-turn');
 
-
     let currentPlayer = player1;
 
     const switchPlayer = () => {
@@ -113,43 +112,46 @@ const Game = () => {
     const endGame = () => {
         gameBoard.btns.forEach(btn => {
             btn.disabled = true;
+            btn.removeEventListener('click', handleClick);
         });
+    }
+
+    const handleClick = (e) => {
+        const board = gameBoard.returnBoard();
+        const clickedBtn = document.getElementById(`${e.target.id}`);
+        const index = parseInt(clickedBtn.id);
+
+        turn.textContent = `${currentPlayer.name}'s turn`;
+
+        if (board[index] === '') {
+            gameBoard.updateBoard(index, currentPlayer.symbol)
+            gameBoard.displayBoard(index, currentPlayer.symbol);
+
+            if (gameBoard.checkWinner(currentPlayer.symbol)) {
+                turn.textContent = `${currentPlayer.name} wins!`;
+                if (playAgain() === 'yes') {
+                    startGame()
+                } else {
+                    endGame();
+                }
+            } else if (gameBoard.checkDraw()) {
+                turn.textContent = `It's a draw!`;
+                if (playAgain() === 'yes') {
+                    startGame()
+                } else {
+                    endGame();
+                }
+            }
+            
+            switchPlayer();
+        } else {
+            turn.textContent = `Invalid move`;
+        };
     }
 
     const playGame = () => {
         gameBoard.btns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const board = gameBoard.returnBoard();
-                const clickedBtn = document.getElementById(`${e.target.id}`);
-                const index = parseInt(clickedBtn.id);
-
-                turn.textContent = `${currentPlayer.name}'s turn`;
-
-                if (board[index] === '') {
-                    gameBoard.updateBoard(index, currentPlayer.symbol)
-                    gameBoard.displayBoard(index, currentPlayer.symbol);
-    
-                    if (gameBoard.checkWinner(currentPlayer.symbol)) {
-                        turn.textContent = `${currentPlayer.name} wins!`;
-                        if (playAgain() === 'yes') {
-                            startGame()
-                        } else {
-                            endGame();
-                        }
-                    } else if (gameBoard.checkDraw()) {
-                        turn.textContent = `It's a draw!`;
-                        if (playAgain() === 'yes') {
-                            startGame()
-                        } else {
-                            endGame();
-                        }
-                    }
-    
-                    switchPlayer();
-                } else {
-                    turn.textContent = `Invalid move`;
-                };
-            })
+            btn.addEventListener('click', handleClick)
         })
     }
 
@@ -166,3 +168,5 @@ const Game = () => {
 
 const newGame = Game();
 newGame.startGame();
+
+
