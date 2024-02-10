@@ -16,12 +16,6 @@ const GameBoard = () => {
     const turn = document.querySelector('#current-player-turn');
 
     const initaliseBoard = () => {
-        // I AM HERE
-        // I HAVE THE FOLLOWING PROBLEM
-        // - game works ok but when the player chooses to playAgain the following happens
-        //  - the last symbol persists in it's place
-        //  - turn.textContent remains 'Invalid move'
-
         turn.textContent = `Let's play`;
 
         btns.forEach(btn => {
