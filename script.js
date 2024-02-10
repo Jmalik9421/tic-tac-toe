@@ -1,8 +1,3 @@
-// currently:
-// game works in console
-// next steps:
-// create html buttons to represent board, style in css, update js so it can be played with mouse
-
 const Player = (name, symbol) => {
     return {
         name,
@@ -11,10 +6,10 @@ const Player = (name, symbol) => {
 };
 
 const GameBoard = () => {
-    let board = [   // let used as board will need to be updated
-        '', '', '', // board will be an array of empty strings
-        '', '', '', // empty strings will be updated to be a string of a symbol
-        '', '', '', // 'X' for player1, 'O' for player2
+    let board = [  
+        '', '', '', 
+        '', '', '', 
+        '', '', '', 
     ]
 
     const btns = document.querySelectorAll('button');
@@ -33,12 +28,7 @@ const GameBoard = () => {
     };
 
     const displayBoard = (index, symbol) => {
-        console.log(board.slice(0, 3));
-        console.log(board.slice(3, 6));
-        console.log(board.slice(6));
-
         btns[index].textContent = symbol;
-
         return board;
     }
 
@@ -79,6 +69,7 @@ const GameBoard = () => {
 
     return {
         board,
+        btns,
         initaliseBoard,
         updateBoard,
         displayBoard,
@@ -92,17 +83,6 @@ const Game = () => {
     const player1 = Player('Player 1', 'X');
     const player2 = Player('Player 2', 'O');
     const gameBoard = GameBoard();
-    const validMoves = {
-        'top left': 0, 
-        'top middle': 1, 
-        'top right': 2,
-        'middle left': 3, 
-        'middle middle': 4, 
-        'middle right': 5,
-        'bottom left': 6, 
-        'bottom middle': 7, 
-        'bottom right': 8,
-    }
 
     let currentPlayer = player1;
 
@@ -111,35 +91,33 @@ const Game = () => {
     }
 
     const playGame = () => {
-        while (true) {
-            console.log(`${currentPlayer.name}'s move`);
-            const move = prompt('What is your move?');
-            const index = validMoves[move];
-            const board = gameBoard.returnBoard();
+        const btns = gameBoard.btns;
+        btns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const board = gameBoard.returnBoard();
+                const clickedBtn = document.getElementById(`${e.target.id}`);
+                const index = parseInt(clickedBtn.id);
+                const turn = document.querySelector('#current-player-turn');
+                turn.textContent = `${currentPlayer.name}'s turn`;
 
-            if (
-                move in validMoves
-                && board[index] === ''
-                ) {
-                gameBoard.updateBoard(index, currentPlayer.symbol)
-                gameBoard.displayBoard(index, currentPlayer.symbol);
-
-                if (gameBoard.checkWinner(currentPlayer.symbol)) {
-                    console.log(`${currentPlayer.name} wins!`);
-                    break;
-                } else if (gameBoard.checkDraw()) {
-                    console.log(`Its a draw!`);
-                    break;
-                }
-
-                switchPlayer();
-            } else {
-                console.log('Invalid move');
-            };
-
-        };
-    };
+                if (board[index] === '') {
+                    gameBoard.updateBoard(index, currentPlayer.symbol)
+                    gameBoard.displayBoard(index, currentPlayer.symbol);
     
+                    if (gameBoard.checkWinner(currentPlayer.symbol)) {
+                        turn.textContent = `${currentPlayer.name} wins!`;
+                    } else if (gameBoard.checkDraw()) {
+                        turn.textContent = `It's a draw!`;
+                    }
+    
+                    switchPlayer();
+                } else {
+                    turn.textContent = `Invalid move`;
+                };
+            })
+        })
+    }
+
     const startGame = () => {
         gameBoard.initaliseBoard();
         playGame();
@@ -151,7 +129,4 @@ const Game = () => {
 };
 
 const newGame = Game();
-const start = prompt('Do you want to start the game?');
-if (start === 'yes') {
-    newGame.startGame();
-}
+newGame.startGame();
