@@ -41,8 +41,6 @@ const GameBoard = () => {
         let playerTwo = players.playerTwo;
     }
 
-
-
     const updateBoard = (board, index, symbol) => {
         board[index] = symbol;
     }
@@ -82,6 +80,7 @@ const Game = () => {
     const gameBoard = GameBoard();
     const turn = gameBoard.returnTurn();
     const btns = gameBoard.returnBtns();
+    btns.pop(); // get rid of last button, which is the start button, in the array
     const winningCombinations = [
         // rows
         [0, 1, 2],
@@ -95,7 +94,6 @@ const Game = () => {
         [0, 4, 8],
         [2, 4, 6]
     ];
-    btns.pop(); // get rid of last button, which is the start button, in the array
 
     const playersInstance = Player();
     const players = playersInstance.returnPlayers();
@@ -105,6 +103,23 @@ const Game = () => {
     let currentPlayer = playerOne;
     let board = gameBoard.returnBoard();
     let cells = gameBoard.returnCells();
+
+    const checkWinner = (board, symbol) => {
+        for (const combination of winningCombinations) {
+            const [a, b, c] = combination;
+            if (board[a] === symbol && board[b] === symbol && board[c] === symbol) {
+                return true;
+            };
+        };
+        return false;
+    };
+
+    const checkDraw = (board) => {
+        if (!board.includes('')) {
+            return true;
+        }
+        return false;
+    };
 
     const startGame = () => {
         gameBoard.initaliseBoard();
@@ -116,14 +131,37 @@ const Game = () => {
         currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
     }
 
-    const displayTurn = () => {
-        turn.innerHTML = `${currentPlayer.name}'s turn`;
-    }
+    const displayTurn = (state) => {
+        if (state === 'turn') {
+            turn.innerHTML = `${currentPlayer.name}'s turn`;
+        } else if (state === 'win') {
+            turn.innerHTML = `${currentPlayer.name} wins!`;
+        } else if (state === 'draw') {
+            turn.innerHTML = `It's a draw!`;
+        };
+    };
 
     const move = (index) => {
         gameBoard.updateBoard(board, index, currentPlayer.symbol);
         gameBoard.updateCells(cells, index, currentPlayer.symbol);
-    }
+
+        if (checkWinner(board, currentPlayer.symbol)) {
+            displayTurn('win');
+            btns.forEach(btn => {
+                btn.disabled = true;
+                btn.removeEventListener('click', move);
+            });
+        } else if (checkDraw(board)) {
+            displayTurn('draw');
+            btns.forEach(btn => {
+                btn.disabled = true;
+                btn.removeEventListener('click', move);
+            });
+        } else {
+            switchPlayer();
+            displayTurn('turn')
+        };
+    };
 
     const countdown = () => {
         let time = 3;
@@ -134,7 +172,7 @@ const Game = () => {
                 turn.innerHTML = `${time}`;
             } else {
                 clearInterval(startCountdown);
-                displayTurn();
+                displayTurn('turn');
             }
         }, 1000);
     }
@@ -143,8 +181,6 @@ const Game = () => {
         btns.forEach((btn, index) => {
             btn.addEventListener('click', () => {
                 move(index);
-                switchPlayer();
-                displayTurn()
             });
         });
     };
