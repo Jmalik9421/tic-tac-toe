@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-    <div id="game-container">
-        <h1 id="turn">Let's play</h1>
+    <div id="game_container">
+        <h1 id="turn">Let's play!</h1>
     
         <ul>
             <li>
@@ -27,6 +27,28 @@
                 <button><p></p></button>
             </li>
         </ul>
+
+        <form>
+            <h3>Enter player names and press button to start the game</h3>
+
+            <div id="player_one_container">
+                <label for="player_one_name">Player One Name: </label>
+                <input type="text" 
+                id="player_one_name"
+                name="player_one_name" 
+                placeholder="Barry Allen">
+            </div>
+
+            <div id="player_two_container">
+                <label for="player_two_name">Player Two Name: </label>
+                <input type="text" 
+                id="player_two_name" 
+                name="player_two_name" 
+                placeholder="John Constantine">
+            </div>
+
+            <button type="submit" id="start_game">Start Game!</button>
+        </form>
     </div>
 
     <script src="./script.js"></script>
