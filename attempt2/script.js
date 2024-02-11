@@ -43,36 +43,37 @@ const GameBoard = () => {
 
     const updateBoard = (board, index, symbol) => {
         board[index] = symbol;
-    }
-
+    };
+    
     const updateCells = (cells, index, symbol) => {
         cells[index].textContent = symbol;
-    }
-
-    const returnBtns = () => {
-        return btns
-    }
-
-    const returnTurn = () => {
-        return turn
-    };
-
-    const returnCells = () => {
-        return cells
     };
 
     const returnBoard = () => {
-        return board
+        return board;
     };
+    
+    const returnTurn = () => {
+        return turn;
+    };
+
+    const returnBtns = () => {
+        return btns;
+    };
+
+    const returnCells = () => {
+        return cells;
+    };
+
     
     return {
         initaliseBoard,
         updateBoard,
         updateCells,
-        returnBtns,
-        returnTurn,
-        returnCells,
         returnBoard,
+        returnTurn,
+        returnBtns,
+        returnCells
     }
 }
 
@@ -80,7 +81,9 @@ const Game = () => {
     const gameBoard = GameBoard();
     const turn = gameBoard.returnTurn();
     const btns = gameBoard.returnBtns();
+
     btns.pop(); // get rid of last button, which is the start button, in the array
+
     const winningCombinations = [
         // rows
         [0, 1, 2],
@@ -101,44 +104,36 @@ const Game = () => {
     let playerTwo = players.playerTwo;
 
     let currentPlayer = playerOne;
+
     let board = gameBoard.returnBoard();
     let cells = gameBoard.returnCells();
-
-    const checkWinner = (board, symbol) => {
-        for (const combination of winningCombinations) {
-            const [a, b, c] = combination;
-            if (board[a] === symbol && board[b] === symbol && board[c] === symbol) {
-                return true;
-            };
-        };
-        return false;
-    };
-
-    const checkDraw = (board) => {
-        if (!board.includes('')) {
-            return true;
-        }
-        return false;
-    };
-
+    
     const startGame = () => {
         gameBoard.initaliseBoard();
         countdown();
         playGame();
+    };
+
+    const countdown = () => {
+        let time = 3;
+        turn.innerHTML = `${time}`;
+        const startCountdown = setInterval(() => {
+            time--;
+            if (time >= 0) {
+                turn.innerHTML = `${time}`;
+            } else {
+                clearInterval(startCountdown);
+                displayTurn('turn');
+            }
+        }, 1000);
     }
 
-    const switchPlayer = () => {
-        currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
-    }
-
-    const displayTurn = (state) => {
-        if (state === 'turn') {
-            turn.innerHTML = `${currentPlayer.name}'s turn`;
-        } else if (state === 'win') {
-            turn.innerHTML = `${currentPlayer.name} wins!`;
-        } else if (state === 'draw') {
-            turn.innerHTML = `It's a draw!`;
-        };
+    const playGame = () => {
+        btns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                move(index);
+            });
+        });
     };
 
     const move = (index) => {
@@ -163,26 +158,35 @@ const Game = () => {
         };
     };
 
-    const countdown = () => {
-        let time = 3;
-        turn.innerHTML = `${time}`;
-        const startCountdown = setInterval(() => {
-            time--;
-            if (time >= 0) {
-                turn.innerHTML = `${time}`;
-            } else {
-                clearInterval(startCountdown);
-                displayTurn('turn');
-            }
-        }, 1000);
+    const switchPlayer = () => {
+        currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
     }
 
-    const playGame = () => {
-        btns.forEach((btn, index) => {
-            btn.addEventListener('click', () => {
-                move(index);
-            });
-        });
+    const displayTurn = (state) => {
+        if (state === 'turn') {
+            turn.innerHTML = `${currentPlayer.name}'s turn`;
+        } else if (state === 'win') {
+            turn.innerHTML = `${currentPlayer.name} wins!`;
+        } else if (state === 'draw') {
+            turn.innerHTML = `It's a draw!`;
+        };
+    };
+    
+    const checkWinner = (board, symbol) => {
+        for (const combination of winningCombinations) {
+            const [a, b, c] = combination;
+            if (board[a] === symbol && board[b] === symbol && board[c] === symbol) {
+                return true;
+            };
+        };
+        return false;
+    };
+
+    const checkDraw = (board) => {
+        if (!board.includes('')) {
+            return true;
+        }
+        return false;
     };
 
     return {
