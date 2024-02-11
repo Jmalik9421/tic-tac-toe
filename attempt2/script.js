@@ -115,6 +115,8 @@ const Game = () => {
     };
 
     const countdown = () => {
+        btns.forEach(btn => {btn.disabled = true});
+
         let time = 3;
         turn.innerHTML = `${time}`;
         const startCountdown = setInterval(() => {
@@ -124,8 +126,11 @@ const Game = () => {
             } else {
                 clearInterval(startCountdown);
                 displayTurn('turn');
+                btns.forEach(btn => {btn.disabled = false});
             }
         }, 1000);
+
+
     }
 
     const playGame = () => {
