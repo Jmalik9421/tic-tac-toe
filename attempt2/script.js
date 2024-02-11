@@ -82,6 +82,8 @@ const Game = () => {
     const gameBoard = GameBoard();
     const turn = gameBoard.returnTurn();
     const btns = gameBoard.returnBtns();
+    btns.pop(); // get rid of last button, which is the start button, in the array
+    console.log(btns)
 
     const playersInstance = Player();
     const players = playersInstance.returnPlayers();
@@ -98,9 +100,10 @@ const Game = () => {
         playGame();
     }
 
-    const move = () => {
-        console.log(`move is running`)
+    const move = (index) => {
         turn.innerHTML = `${currentPlayer.name}'s turn`;
+        gameBoard.updateBoard(board, index, currentPlayer.symbol);
+        gameBoard.updateCells(cells, index, currentPlayer.symbol);
     }
 
     const countdown = () => {
@@ -119,7 +122,11 @@ const Game = () => {
     }
 
     const playGame = () => {
-        btns.forEach((btn) => {btn.addEventListener('click', move)});
+        btns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                move(index);
+            });
+        });
     };
 
     return {
@@ -133,21 +140,3 @@ document.querySelector('#start_game').addEventListener('click', (e) => {
     const newGame = Game();
     newGame.startGame();
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
