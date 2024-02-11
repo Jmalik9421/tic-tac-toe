@@ -137,25 +137,31 @@ const Game = () => {
     };
 
     const move = (index) => {
-        gameBoard.updateBoard(board, index, currentPlayer.symbol);
-        gameBoard.updateCells(cells, index, currentPlayer.symbol);
+        if (board[index] === '') {
+            gameBoard.updateBoard(board, index, currentPlayer.symbol);
+            gameBoard.updateCells(cells, index, currentPlayer.symbol);
 
-        if (checkWinner(board, currentPlayer.symbol)) {
-            displayTurn('win');
-            btns.forEach(btn => {
-                btn.disabled = true;
-                btn.removeEventListener('click', move);
-            });
-        } else if (checkDraw(board)) {
-            displayTurn('draw');
-            btns.forEach(btn => {
-                btn.disabled = true;
-                btn.removeEventListener('click', move);
-            });
+            if (checkWinner(board, currentPlayer.symbol)) {
+                displayTurn('win');
+                btns.forEach(btn => {
+                    btn.disabled = true;
+                    btn.removeEventListener('click', move);
+                });
+            } else if (checkDraw(board)) {
+                displayTurn('draw');
+                btns.forEach(btn => {
+                    btn.disabled = true;
+                    btn.removeEventListener('click', move);
+                });
+            } else {
+                switchPlayer();
+                displayTurn('turn')
+            };
         } else {
-            switchPlayer();
-            displayTurn('turn')
-        };
+            displayTurn('invalid');
+        }
+
+
     };
 
     const switchPlayer = () => {
@@ -169,7 +175,9 @@ const Game = () => {
             turn.innerHTML = `${currentPlayer.name} wins!`;
         } else if (state === 'draw') {
             turn.innerHTML = `It's a draw!`;
-        };
+        } else {
+            turn.innerHTML = `${currentPlayer.name}, invalid move!`;
+        }
     };
     
     const checkWinner = (board, symbol) => {
