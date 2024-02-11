@@ -1,18 +1,22 @@
-// how is this game going to work
-// the track of the game will be kept on a board object. the changes of this board object will be mapped onto the html btn elements to display the update
-// 
-// 
-// 1. the game needs to be started
-//   - players need to be created
-//   - 
-// 
-// 
-// 
-// 
-// 
-
 const Player = (name, symbol) => {
+    const returnPlayers = () => {
+        let playerOne = {name: 'Player 1', symbol:'X'};
+        let playerTwo = {name: 'Player 2', symbol: 'O'};
+        const playerOneName = document.querySelector('#player_one_name').value;
+        const playerTwoName = document.querySelector('#player_two_name').value;
+        playerOne.name = playerOneName !== '' ? playerOneName : 'Player 1';
+        playerTwo.name = playerTwoName !== '' ? playerTwoName : 'Player 2';
+        turn.innerHTML = `Player 1: ${playerOne.name}, ${playerOne.symbol}
+                      <br>Player 2: ${playerTwo.name}, ${playerTwo.symbol}`;
+
+        return {
+            playerOne,
+            playerTwo
+        }
+    }
+
     return {
+        returnPlayers,
         name,
         symbol
     }
@@ -31,15 +35,13 @@ const GameBoard = () => {
             cell.textContent = '';
         });
 
-        let player1 = Player('Player 1', 'X');
-        let player2 = Player('Player 2', 'O');
-        const playerOneName = document.querySelector('#player_one_name').value;
-        const playerTwoName = document.querySelector('#player_two_name').value;
-        player1.name = playerOneName !== '' ? playerOneName : 'Player 1';
-        player2.name = playerTwoName !== '' ? playerTwoName : 'Player 2';
-        turn.innerHTML = `Player 1: ${player1.name}, ${player1.symbol}
-                      <br>Player 2: ${player2.name}, ${player2.symbol}`;
+        const playersInstance = Player();
+        const players = playersInstance.returnPlayers();
+        let playerOne = players.playerOne;
+        let playerTwo = players.playerTwo;
     }
+
+
 
     const updateBoard = (board, index, symbol) => {
         board[index] = symbol;
@@ -81,10 +83,10 @@ const Game = () => {
     const turn = gameBoard.returnTurn();
     const btns = gameBoard.returnBtns();
 
-    const playerOneName = document.querySelector('#player_one_name');
-    const playerOne = Player(playerOneName, 'X');
-    const playerTwoName = document.querySelector('#player_two_name');
-    const playerTwo = Player(playerTwoName, 'O');
+    const playersInstance = Player();
+    const players = playersInstance.returnPlayers();
+    let playerOne = players.playerOne;
+    let playerTwo = players.playerTwo;
 
     let currentPlayer = playerOne;
     let board = gameBoard.returnBoard();
