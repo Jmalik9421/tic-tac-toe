@@ -82,8 +82,20 @@ const Game = () => {
     const gameBoard = GameBoard();
     const turn = gameBoard.returnTurn();
     const btns = gameBoard.returnBtns();
+    const winningCombinations = [
+        // rows
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        // columns
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        // diagonals
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
     btns.pop(); // get rid of last button, which is the start button, in the array
-    console.log(btns)
 
     const playersInstance = Player();
     const players = playersInstance.returnPlayers();
@@ -103,10 +115,6 @@ const Game = () => {
     const switchPlayer = () => {
         currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
     }
-
-    // I AM HERE
-    // ive got the following problem:
-    // -there is a interval in changing the turn.innerhtml to display which player's turn it currently is
 
     const displayTurn = () => {
         turn.innerHTML = `${currentPlayer.name}'s turn`;
