@@ -18,10 +18,35 @@ const Player = (name, symbol) => {
     }
 }
 
-const Game = () => {
+const GameBoard = () => {
     let board = ['', '', '', '', '', '', '', '', ''];
     let cells = [...document.querySelectorAll('button p')];
     const turn = document.querySelector('#turn');
+
+    const returnTurn = () => {
+        return turn
+    };
+
+    const returnCells = () => {
+        return cells
+    };
+
+    const returnBoard = () => {
+        return board
+    };
+    
+    return {
+        returnTurn,
+        returnCells,
+        returnBoard,
+    }
+}
+
+const Game = () => {
+    const gameBoard = GameBoard();
+    const turn = gameBoard.returnTurn();
+    let board = gameBoard.returnBoard();
+    let cells = gameBoard.returnCells();
 
     const startGame = () => {
         initaliseBoard()
