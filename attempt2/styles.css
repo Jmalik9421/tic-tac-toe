@@ -1,0 +1,39 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0px;
+}
+
+li {
+    display: flex;
+}
+
+button {
+    width: 10em;
+    height: 10em;
+    text-align: center;
+    margin: 1em;
+}
+
+button p {
+    font-size: 5em;
+}
