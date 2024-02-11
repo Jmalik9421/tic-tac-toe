@@ -20,8 +20,34 @@ const Player = (name, symbol) => {
 
 const GameBoard = () => {
     let board = ['', '', '', '', '', '', '', '', ''];
-    let cells = [...document.querySelectorAll('button p')];
+    let cells = [...document.querySelectorAll('p')];
     const turn = document.querySelector('#turn');
+
+    const initaliseBoard = () => {
+        board = ['', '', '', '', '', '', '', '', ''];
+
+        cells.forEach(cell => {
+            cell.textContent = '';
+        });
+
+        let player1 = Player('Player 1', 'X');
+        let player2 = Player('Player 2', 'O');
+        const playerOneName = document.querySelector('#player_one_name').value;
+        const playerTwoName = document.querySelector('#player_two_name').value;
+        player1.name = playerOneName !== '' ? playerOneName : 'Player 1';
+        player2.name = playerTwoName !== '' ? playerTwoName : 'Player 2';
+        turn.innerHTML = `Player 1: ${player1.name}, ${player1.symbol}
+                      <br>Player 2: ${player2.name}, ${player2.symbol}`;
+
+    }
+
+    const updateBoard = (board, index, symbol) => {
+        board[index] = symbol;
+    }
+
+    const updateCells = (cells, index, symbol) => {
+        cells[index].textContent = symbol;
+    }
 
     const returnTurn = () => {
         return turn
@@ -36,6 +62,9 @@ const GameBoard = () => {
     };
     
     return {
+        initaliseBoard,
+        updateBoard,
+        updateCells,
         returnTurn,
         returnCells,
         returnBoard,
@@ -49,33 +78,16 @@ const Game = () => {
     let cells = gameBoard.returnCells();
 
     const startGame = () => {
-        initaliseBoard()
+        gameBoard.initaliseBoard()
         playGame()
-    }
-
-    const initaliseBoard = () => {
-        board = ['', '', '', '', '', '', '', '', ''];
-
-        cells.forEach(cell => {
-            cell.textContent = '';
-        });
-
-        let player1 = Player('Player 1', 'X');
-        let player2 = Player('Player 2', 'O');
-
-        const playerOneName = document.querySelector('#player_one_name').value;
-        const playerTwoName = document.querySelector('#player_two_name').value;
-
-        player1.name = playerOneName !== '' ? playerOneName : 'Player 1';
-        player2.name = playerTwoName !== '' ? playerTwoName : 'Player 2';
-
-        turn.innerHTML = `Player 1: ${player1.name}, ${player1.symbol}
-                      <br>Player 2: ${player2.name}, ${player2.symbol}`;
-
     }
 
     const playGame = () => {
         console.log(`game has started`);
+        gameBoard.updateBoard(board, 4, 'X');
+        gameBoard.updateCells(cells, 4, 'X');
+        // I AM HERE
+        // I NEED TO WRITE THE LOGIC TO UPDATE BOARD AND CELLS 
     };
 
     return {
