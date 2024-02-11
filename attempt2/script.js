@@ -143,16 +143,10 @@ const Game = () => {
 
             if (checkWinner(board, currentPlayer.symbol)) {
                 displayTurn('win');
-                btns.forEach(btn => {
-                    btn.disabled = true;
-                    btn.removeEventListener('click', move);
-                });
+                endGame();
             } else if (checkDraw(board)) {
                 displayTurn('draw');
-                btns.forEach(btn => {
-                    btn.disabled = true;
-                    btn.removeEventListener('click', move);
-                });
+                endGame();
             } else {
                 switchPlayer();
                 displayTurn('turn')
@@ -196,6 +190,13 @@ const Game = () => {
         }
         return false;
     };
+
+    const endGame = () => {
+        btns.forEach(btn => {
+            btn.disabled = true;
+            btn.removeEventListener('click', move);
+        });
+    }
 
     return {
         startGame
