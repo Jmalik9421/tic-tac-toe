@@ -129,8 +129,6 @@ const Game = () => {
                 btns.forEach(btn => {btn.disabled = false});
             }
         }, 1000);
-
-
     }
 
     const playGame = () => {
@@ -159,8 +157,6 @@ const Game = () => {
         } else {
             displayTurn('invalid');
         }
-
-
     };
 
     const switchPlayer = () => {
