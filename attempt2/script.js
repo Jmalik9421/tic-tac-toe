@@ -100,31 +100,43 @@ const Game = () => {
         playGame();
     }
 
-    const move = (index) => {
+    const switchPlayer = () => {
+        currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
+    }
+
+    // I AM HERE
+    // ive got the following problem:
+    // -there is a interval in changing the turn.innerhtml to display which player's turn it currently is
+
+    const displayTurn = () => {
         turn.innerHTML = `${currentPlayer.name}'s turn`;
+    }
+
+    const move = (index) => {
         gameBoard.updateBoard(board, index, currentPlayer.symbol);
         gameBoard.updateCells(cells, index, currentPlayer.symbol);
     }
 
     const countdown = () => {
-        setTimeout(() => {}, 2000);
-
         let time = 3;
-        const startCountdown = setInterval( () => {
-            turn.innerHTML = `${time}`;
+        turn.innerHTML = `${time}`;
+        const startCountdown = setInterval(() => {
             time--;
-            time < 0 ? clearInterval(startCountdown) : null;
-        }, 1000 );
-
-        setInterval(() => {
-            turn.innerHTML = `${currentPlayer.name}'s turn`;
-        }, 5000);
+            if (time >= 0) {
+                turn.innerHTML = `${time}`;
+            } else {
+                clearInterval(startCountdown);
+                displayTurn();
+            }
+        }, 1000);
     }
 
     const playGame = () => {
         btns.forEach((btn, index) => {
             btn.addEventListener('click', () => {
                 move(index);
+                switchPlayer();
+                displayTurn()
             });
         });
     };
